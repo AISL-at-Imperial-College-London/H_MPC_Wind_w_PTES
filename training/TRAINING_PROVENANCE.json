@@ -1,0 +1,18 @@
+{
+  "build_date": "2026-10-18",
+  "source_archives": [
+    "Horse_Creek_PTES_MPC_Lean_Repo_2026-10-18.zip",
+    "Horse_Creek_TCVAE(2).zip"
+  ],
+  "preserves_original_mpc_runtime_files": true,
+  "new_training_files_sha256": {
+    "train_forecasts.py": "0908b9be1b05eecfb5cd38217dae36d87e9a9de8d9eee727a4ff8cadd7b83da9",
+    "RUN_TCVAE_TRAINING_FROM_SPYDER.py": "b4c97c00fe591e3d2ecde8c62f8fefca43c5c9ed2e53485f7e96d954155941d6",
+    "RUN_CONTINUOUS_CVAE_TRAINING_FROM_SPYDER.py": "acb3c898c00345738b8062939ea48563325e36c7f9aa8aadd472ff63cf3fd53b",
+    "training/README.md": "6b2094db929e1c127308248b449b5684167f13b89040be28b824fa41e618769d",
+    "training/thesis_tcvae/__init__.py": "21d75a5b098d9d6e5d4360472797222a3ce4e2543e9e302f718208cbf218e0f1",
+    "training/thesis_tcvae/train_thesis_tcvae.py": "ea26efa8f2947da5104b2dcadbf56dfe0c45f82e95130e03323dd62ee9cfd665",
+    "training/thesis_tcvae/check_conditioning.py": "30defb295e040380570ca10776d4c410aa4a1b6af88327dba196d8ce78eef1dd"
+  },
+  "notes": "New thesis trainer additionally supports canonical repository CSV and no longer requires absolute Windows ZIP path. Model/loss/splits retained. The active continuous training/calibration scripts are original, unchanged."
+}
