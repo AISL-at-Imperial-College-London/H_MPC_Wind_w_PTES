@@ -1,0 +1,27 @@
+# Generated scored results and large simulator outputs
+results/
+outputs/
+*.log
+*.tmp
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Local environments and editorial scratch
+.env
+.env.*
+.spyproject/
+.spyderproject/
+.DS_Store
+Thumbs.db
+
+# Independent training experiments and checkpoints
+training_runs/
