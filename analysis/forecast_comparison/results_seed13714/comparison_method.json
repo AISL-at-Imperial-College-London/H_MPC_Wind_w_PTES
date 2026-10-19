@@ -1,0 +1,31 @@
+{
+  "issued_days": 28,
+  "weeks": [
+    "jul_2025",
+    "sep_2025",
+    "nov_2025",
+    "dec_2025"
+  ],
+  "forecast_horizon_h": 84,
+  "scored_hours": [
+    84
+  ],
+  "raw": 500,
+  "reduced": 50,
+  "seed": 13714,
+  "checkpoint_hashes": {
+    "development_master": "3eaca0048dc42ee4b8b9373570e353060bdd97cc923f232da29584607f4eff1a",
+    "frozen_cvae": "15a9b7c36c9c113b5ec75da413f6889c67bc95b022a086f522a4bd69e25fd333",
+    "calibration": "da4e6e15ffcf10dc7e3f0d1085e6c267bb1ecc2d5ad6e6bf8bb936508cfb2ca4"
+  },
+  "protocol": "D-1 09:30 America/Chicago, 84h from next local midnight, each day evaluated; overlapping horizons",
+  "source": "frozen shipped continuous_CVAE_v3 calibrated vs shipped causal historical empirical copula",
+  "data_scope": "2025 post-calibration historical comparison; not 2026 untouched holdouts",
+  "caveats": [
+    "Copula pool assembled from entire pre-2026 development CSV, but filters eligible analogues to blocks fully finished by issuance.",
+    "CVAE weights learned through 2024, validation Jan-Feb 2025, calibration Mar-Jun 2025; the copula assimilates past 2025 analogues and recent DA prices.",
+    "Hourly score records from successive daily 84-hour forecasts overlap; not independent hourly samples.",
+    "Only forecast quality measured; the PTES optimisation is not rerun.",
+    "February 2026 has complete 84h outcomes for February 9-12 issuance only; 24h outcomes for February 9-14."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "description": "Causal apples-to-apples comparison: frozen continuous CVAE versus 96/96 empirical analogue copula.\n\nNeither CVAE architecture nor deployed checkpoints are modified. Both forecast the 96 hours\nimmediately after their last 96 completed wind & price measurements. The analogue model\nuses feature-based similarity in BOTH 96-hour histories, 96-hour causal price recalibration,\nand a fixed reference library ending 2025-06-30. This is a NEW experimental copula baseline.\n",
+  "seeds": [
+    3714,
+    13714,
+    2718
+  ],
+  "training_end_utc": "2025-06-30T23:00:00+00:00",
+  "cvAE_checkpoint_sha256": "15a9b7c36c9c113b5ec75da413f6889c67bc95b022a086f522a4bd69e25fd333",
+  "calibration_sha256": "da4e6e15ffcf10dc7e3f0d1085e6c267bb1ecc2d5ad6e6bf8bb936508cfb2ca4",
+  "pool_data_sha256": "3eaca0048dc42ee4b8b9373570e353060bdd97cc923f232da29584607f4eff1a",
+  "history_hours": 96,
+  "scoring_hours": 96,
+  "raw": 500,
+  "kept": 50,
+  "selected_forecast_dates": {
+    "February": [
+      "2026-02-09",
+      "2026-02-10",
+      "2026-02-11",
+      "2026-02-12"
+    ],
+    "May": [
+      "2026-05-11",
+      "2026-05-12",
+      "2026-05-13",
+      "2026-05-14"
+    ],
+    "July": [
+      "2026-07-13",
+      "2026-07-14",
+      "2026-07-15",
+      "2026-07-16"
+    ]
+  },
+  "origins_per_week": 4,
+  "scenario_reduction": "same shipped backward_reduce_original, but over the 96h evaluation window",
+  "caution": "This is NOT the original copula nor the exact MPC 84h scenario reduction or PTES closed-loop evaluation."
+}

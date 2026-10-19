@@ -1,0 +1,87 @@
+% Insert into the existing CVAE appendix before the scenario-count sensitivity subsection.
+% No additional LaTeX packages required beyond booktabs and graphicx.
+\subsection{Comparison with a historical-analogue empirical copula}
+\label{app:cvae_copula_96x96}
+
+To evaluate the probabilistic scenario generator against a nonparametric
+alternative, we compare the deployed continuous CVAE with a
+\emph{historical-analogue empirical-copula benchmark}. Rather than fitting a
+parametric copula, the benchmark samples complete paired wind-power and
+day-ahead (DA) price trajectories from historical observations, preserving
+the empirical temporal and cross-variable rank dependence of each trajectory.
+Candidates are restricted to analogue-start months within two calendar months of
+the forecast-issue month. Their sampling weights are based on a Gaussian kernel of
+historical similarity, with a uniform-weight component to avoid excessive
+concentration on a small number of analogues.
+
+The comparison uses \emph{matched recent-information and evaluation windows}:
+both predictors are conditioned on the same 96 completed hourly wind-power
+and DA-price observations available at the D$-1$ 09:30
+\texttt{America/Chicago} forecast issue, and both are scored on the
+following 96 consecutive hours, starting immediately after the last completed
+observation. For the copula, the similarity features comprise four consecutive
+24-hour means for each variable, the most recent 24-hour standard deviation
+and the most recent 12-hour mean for each variable; prices are transformed
+with $\operatorname{asinh}(\lambda^{\mathrm{DA}}/50)$ for similarity evaluation.
+The selected historical DA-price trajectories are additionally recalibrated
+using a monotonic empirical-quantile mapping to the last 96 observed DA
+prices. This preserves the ranks of the sampled paired trajectories.
+The reference library contains complete historical analogue windows ending
+no later than June 2025 and is frozen during the 2026 evaluation.
+
+The continuous CVAE retains the checkpoint and paired-residual calibration
+used in the MPC case studies. As this model generates 120 future hours from a
+96-hour conditioning history, its first 96 forecast hours are used here;
+the underlying network is not retrained. Each predictor generates 500 joint
+trajectories, reduced by the same backward-deletion algorithm to 50 weighted
+representatives, with the reduction distance computed on the common 96-hour
+evaluation window. These 96-hour forecasts begin at the first unobserved hour,
+not at the delivery-day midnight. Consequently, the exercise is a
+\emph{forecast-quality comparison}, distinct from the 84-hour, delivery-aligned
+scenario reduction and closed-loop MPC assessment in the main text.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Matched 96-hour conditioning/96-hour prediction comparison of the
+historical-analogue empirical copula and deployed continuous CVAE on the 2026
+unseen holdouts. Each period has four daily forecast issue origins, with
+scores averaged over three scenario-sampling seeds (3714, 13714 and 2718).
+Both methods generate 500 trajectories reduced to 50 weighted scenarios.
+CRPS units are MW for wind and USD/MWh for DA price; the central-interval
+coverage target is 90\%, and the trajectory energy score is dimensionless.
+Bold indicates the lower CRPS/energy score or coverage closest to 90\% in
+each pair. Daily forecast windows overlap and are not independent samples.}
+\label{tab:cvae_copula_96x96}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Period & Predictor & Wind CRPS & DA-price CRPS & Wind cov. (\%) & DA-price cov. (\%) & Energy score \\
+\midrule
+February 2026 & Copula & \textbf{41.13} & \textbf{4.87} & \textbf{82.3} & 95.4 & \textbf{2.426} \\
+              & CVAE & 43.52 & 6.70 & 82.2 & \textbf{93.1} & 2.731 \\
+\addlinespace
+May 2026 & Copula & 35.75 & 12.09 & \textbf{94.7} & 58.4 & 3.163 \\
+         & CVAE & \textbf{35.40} & \textbf{8.73} & 97.1 & \textbf{96.1} & \textbf{2.736} \\
+\addlinespace
+July 2026 & Copula & 34.65 & 6.88 & \textbf{91.3} & 62.9 & 2.286 \\
+          & CVAE & \textbf{32.44} & \textbf{5.15} & 96.4 & \textbf{99.0} & \textbf{1.978} \\
+\midrule
+Pooled & Copula & 37.17 & 7.95 & \textbf{89.4} & 72.3 & 2.625 \\
+       & CVAE & \textbf{37.12} & \textbf{6.86} & 91.9 & \textbf{96.1} & \textbf{2.482} \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The copula has lower wind and DA-price CRPS and a lower joint energy score
+in February, whereas the CVAE performs better in May and July. The pooled
+wind CRPS values are almost identical, while the CVAE achieves lower pooled
+DA-price CRPS and joint trajectory energy score across all three sampling
+seeds. The copula's 96-observation price-marginal recalibration produces
+substantial DA-price interval undercoverage in May and July; the CVAE shows
+some overcoverage in these periods. Hence, equal recent-information windows
+do not imply equally calibrated models, and the reported comparison does not
+establish that the CVAE is uniformly superior or yields greater MPC revenue.
+Twelve overlapping forecast issue origins and three Monte Carlo seeds provide
+a limited basis for statistical inference. The copula's historical analogue
+selection and marginal transformation are design choices for this controlled
+benchmark, rather than a claim of an optimally tuned copula model.
