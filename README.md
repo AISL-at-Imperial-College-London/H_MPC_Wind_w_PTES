@@ -68,6 +68,27 @@ Each primary case uses an initial warm-up period before the **seven-day** scored
 
 All simulation output is written to `results/` (not included in Git). Completed cases have scored-period summary files; case-level forecast, solver and dispatch diagnostics are available alongside them. The existing scripts support resuming at case boundaries, subject to matching experiment fingerprints. See [experiment instructions](docs/EXPERIMENTS_AND_SOLVERS.md) for case definitions, output files and solver limitations.
 
+
+## Copula versus CVAE: forecast-quality benchmark
+
+We provide a reproducible, solver-free comparison of the shipped **causal historical copula** against the frozen **calibrated continuous CVAE** used by the MPC. It evaluates paired probabilistic wind and DA-price forecasts, both before and after reduction from 500 to 50 scenarios. The supplementary archive contains 28 daily forecast issues across four 2025 weeks plus the evaluable portion of the February 2026 holdout. **Neither predictor wins consistently.** This does not replace a closed-loop PTES revenue comparison.
+
+```bash
+python analysis/forecast_comparison/compare_copula_cvae.py --out forecast_comparison_results
+```
+
+For methodology, scores, seed sensitivity, and February limitations, see [Copula vs CVAE comparison](analysis/forecast_comparison/README.md).
+
+### Matched 96-hour history / 96-hour forecast benchmark (2026 unseen holdouts)
+
+For a better-controlled comparison with the **deployed** continuous CVAE, we also provide a *separate* nonparametric historical-analogue copula configured to use **96 complete hours of both wind and DA-price history** and evaluate the first **96 future hours**. This differs from the older copula benchmark above, which uses only a 24-hour wind summary. The frozen CVAE generates 120 hours; only its first 96 are scored, without retraining. The benchmark uses all three 2026 test periods (four complete issue origins per period), 500 raw / 50 reduced scenarios and three Monte Carlo seeds. No optimisation licence is required.
+
+```bash
+python analysis/forecast_comparison/matched_96x96/benchmark_96x96.py --root . --seeds 3714 13714 2718 --out analysis/forecast_comparison/matched_96x96/results_reproduced
+```
+
+The verified scores, audit records, code, and paper-ready appendix table are under [matched 96/96 comparison](analysis/forecast_comparison/matched_96x96/README.md). This is a forecast-quality comparison over 96 hours, **not** the 84-hour delivery-aligned scenario reduction used within the MPC. The copula is newly specified for this benchmark, not a proven optimal copula model.
+
 ## Forecast model training
 
 Training scripts and the development data required by those scripts are included. Retraining is **separate from evaluation**: new checkpoints go to `training_runs/` and do not automatically replace the frozen models used by the MPC runs.
@@ -95,6 +116,7 @@ The RT-price model's zero-minute publication-lag setting is a **modelling assump
 | `forecast_release/` | Frozen CVAE/XGBoost models, inference and source training routines |
 | `holdout_inputs/` | Historical evaluation inputs for six selected weeks |
 | `train_forecasts.py`, `train_xgboost.py`, `training/` | Training entry points and documentation |
+| `analysis/forecast_comparison/` | Reproducible copula vs calibrated CVAE scores and scripts |
 | `tests/` | Regression and solver-independent scientific checks |
 | `docs/` | Detailed experiment, solver and provenance notes |
 
